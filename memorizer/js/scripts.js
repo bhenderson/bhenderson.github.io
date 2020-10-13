@@ -50,7 +50,8 @@ function generate(text) {
 
   const listener = next()
   document.addEventListener('keypress', listener)
-  document.addEventListener('touchstart', listener, false)
+  document.addEventListener('mousedown', listener)
+  //document.addEventListener('touchstart', listener)
 }
 
 function main() {
