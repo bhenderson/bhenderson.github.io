@@ -6,7 +6,8 @@ function next() {
   const words = Array.from(document.querySelectorAll('.word'))
 
   return (event) => {
-    if (event.code !== 'Space') return
+    if (event.type === 'keypress' && event.code !== 'Space') return
+    event.preventDefault()
 
     const word = words.shift()
 
@@ -47,7 +48,9 @@ function generate(text) {
     div.appendChild(document.createElement('br'))
   })
 
-  document.addEventListener('keypress', next())
+  const listener = next()
+  document.addEventListener('keypress', listener)
+  document.addEventListener('touchstart', listener, false)
 }
 
 function main() {
