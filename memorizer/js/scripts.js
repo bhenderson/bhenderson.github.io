@@ -5,15 +5,13 @@ function isWord(word) {
   return word && word.length &&  word.match(/[a-z]/i)
 }
 
-function next() {
-  return (event) => {
-    if (event.type === 'keypress' && event.code !== 'Space') return
-    event.preventDefault()
+function next(event) {
+  if (event.type === 'keypress' && event.code !== 'Space') return
+  event.preventDefault()
 
-    const word = $('.word.blank')
+  const word = $('.word.blank')
 
-    if (word) show(word)
-  }
+  if (word) show(word)
 }
 
 function shuffle(array) {
@@ -83,9 +81,8 @@ function generate(text) {
     div.appendChild(document.createElement('br'))
   })
 
-  const listener = next()
-  document.addEventListener('keypress', listener)
-  div.addEventListener('mousedown', listener)
+  document.addEventListener('keypress', next)
+  div.addEventListener('mousedown', next)
   //document.addEventListener('touchstart', listener)
 }
 
