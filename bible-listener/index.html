@@ -17,21 +17,7 @@
     </head>
 
     <body>
-        <div id="app">
-            <div class="px-4 py-5 my-5 text-center">
-                <div class="input-group">
-                    <input type="text" class="form-control" v-model="searchInput">
-                    <button class="btn btn-outline-secondary" @click="submitForm">Enter</button>
-                </div>
-
-                <verse-audio v-for="verse in verses" :verse="verse"></verse-audio>
-
-                <div v-if="passages">
-                    <pre v-for="passage of passages">{{ passage }}</pre>
-                </div>
-            </div>
-        </div>
-
+        <div id="app"> </div>
     </body>
 
 </html>

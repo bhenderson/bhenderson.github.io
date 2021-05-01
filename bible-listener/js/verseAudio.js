@@ -1,21 +1,25 @@
+import { audioURL } from './api.js'
+
 export default {
-    template:
-    /*html*/
-    `
-    <div>
-        <audio controls v-bind:src="url"></audio>
-    </div>
+    template: `
+        <div>
+            <audio controls :src="url" ref="audio"></audio>
+        </div>
     `,
     data() {
-        return {
-        }
+        return {}
     },
     computed: {
         url() {
-            return `https://audio.esv.org/hw/${this.verse}.mp3`
+            return audioURL(this.verse);
         },
     },
     props: {
         verse: null,
+        player: null,
+        index: null,
+    },
+    mounted() {
+        if (this.player) this.player.add(this.index, this.$refs.audio)
     }
 }
