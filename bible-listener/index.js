@@ -35,7 +35,7 @@ const App = {
             <verse-audio v-for="(verse, idx) in verses" :verse="verse" @audio="player().add(idx, $event)"></verse-audio>
 
             <div v-if="passages">
-                <pre v-for="passage of passages">{{ passage }}</pre>
+                <pre style="white-space: break-spaces" v-for="passage of passages">{{ passage }}</pre>
             </div>
         </div>
     `,
@@ -82,6 +82,7 @@ const App = {
         async submitForm() {
             const result = await passageSearch(this.searchInput)
 
+            this.verses = []
             this.passages = result.passages
 
             for (const parsed of result.parsed) {

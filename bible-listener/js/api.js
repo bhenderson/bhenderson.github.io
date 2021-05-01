@@ -1,9 +1,9 @@
 import fakeResponse from './fakeResponse.js'
 
-const TOKEN = '';
+const TOKEN = getToken();
 
 export function passageSearch(search) {
-    return Promise.resolve(fakeResponse)
+    // return Promise.resolve(fakeResponse)
 
     search = encodeURIComponent(search)
 
@@ -17,6 +17,14 @@ export function passageSearch(search) {
 
 export function audioURL(ref) {
     return `https://audio.esv.org/hw/${ref}.mp3`
+}
+
+function getToken() {
+    const key = 'ESV_API_TOKEN'
+    const token = localStorage.getItem(key) || prompt('ESV API Token:')
+    localStorage.setItem(key, token)
+
+    return token
 }
 
 export default passageSearch
