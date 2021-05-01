@@ -39,7 +39,6 @@ class Player extends EventEmitter {
 
         this.pause()
 
-        console.trace('play', this.currentTrack)
         return this.currentTrack.play()
     }
 
@@ -61,7 +60,8 @@ class Player extends EventEmitter {
 
     playNext() {
         this.currentTrack = this.nextTrack()
-        console.log('playNext', this.currentTrack)
+        
+        !this.currentTrack && this.repeatAll && this.reset()
 
         if (!this.currentTrack) return
 
@@ -73,8 +73,6 @@ class Player extends EventEmitter {
 
         // loop over indexes for sparse arrays
         for (const idx in this.tracks) {
-            console.log('nextTrack', currentIdx, idx, currentIdx < idx)
-
             if (currentIdx < idx) {
                 return this.tracks[idx]
             }
@@ -86,7 +84,15 @@ class Player extends EventEmitter {
 
         this.currentTrack = this.tracks[0]
 
+        for (const t of this.tracks) {
+            t.currentTime = 0
+        }
+
         isPlaying && this.play()
+    }
+
+    toggleRepeat() {
+        return this.repeatAll = !this.repeatAll
     }
 }
 
@@ -132,6 +138,14 @@ class Track extends EventEmitter {
 
     get playing() {
         return !this.paused && !this.ended && this.elem.readyState > this.elem.HAVE_CURRENT_DATA
+    }
+
+    get currentTime() {
+        return this.elem.currentTime
+    }
+
+    set currentTime(t) {
+        this.elem.currentTime = t
     }
 
     listen(type) {

@@ -25,7 +25,7 @@ const App = {
                     <button class="btn w-100 btn-outline-secondary" @click="stop">Stop</button>
                 </div>
                 <div class="col">
-                    <button class="btn w-100 btn-outline-secondary" @click="toggleRepeat">Repeat</button>
+                    <button class="btn w-100" :class="repeatClass" @click="toggleRepeat">Repeat</button>
                 </div>
             </div>
 
@@ -45,6 +45,7 @@ const App = {
             passages: null,
             verses: [],
             playing: false,
+            repeat: false,
         }
     },
     mounted() {
@@ -55,11 +56,17 @@ const App = {
         playPauseStatus() {
             return this.playing ? 'Pause' : 'Play';
         },
+        repeatClass() {
+            return {
+                'btn-outline-secondary': !this.repeat,
+                'btn-secondary': this.repeat,
+            }
+        },
     },
     methods: {
         /** @returns {Player} */
         player() {
-            if (!this._player) this._player = new Player()
+            if (!this._player) window.player = this._player = new Player()
 
             return this._player
         },
@@ -85,7 +92,7 @@ const App = {
         },
 
         toggleRepeat() {
-            this.player().toggleRepeat()
+            this.repeat = this.player().toggleRepeat()
         }
     }
 }
