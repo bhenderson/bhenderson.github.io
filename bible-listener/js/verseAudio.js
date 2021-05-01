@@ -16,10 +16,8 @@ export default {
     },
     props: {
         verse: null,
-        player: null,
-        index: null,
     },
     mounted() {
-        if (this.player) this.player.add(this.index, this.$refs.audio)
+        this.$emit('audio', this.$refs.audio)
     }
 }

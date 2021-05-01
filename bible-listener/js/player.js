@@ -1,34 +1,29 @@
 import { EventEmitter } from "./eventEmitter.js"
 
 class Player extends EventEmitter {
+    /** @type {Track[]} */
     tracks = []
     currentTrack = null
     repeatAll = false
-    isPlaying = false
+    // isPlaying = false
 
-    // get isPlaying() {
-    //     if (!this.currentTrack) {
-    //         return false;
-    //     }
-
-    //     console.log('yooooooooo isPlaying', this.currentTrack, this.currentTrack.playing)
-    //     return this.currentTrack.playing
-    // }
+    get isPlaying() {
+        for (const track of this.tracks) {
+            if (track.playing) {
+                return true
+            }
+        }
+    }
 
     add(idx, el) {
-        const track = this.tracks[idx] = new Track(idx, el, this)
-
-        // first
-        if (!this.currentTrack) this.currentTrack = track
+        const track = this.tracks[idx] = new Track(el, idx)
 
         track.on('play', t => {
             this.currentTrack = t
-            this.isPlaying = true
             this.emit('play', t)
         })
 
         track.on('pause', t => {
-            this.isPlaying = false
             this.emit('pause', t)
         })
 
@@ -40,9 +35,12 @@ class Player extends EventEmitter {
     }
 
     play() {
-        if (!this.currentTrack) return
+        if (!this.currentTrack) this.reset()
 
-        this.currentTrack.play()
+        this.pause()
+
+        console.trace('play', this.currentTrack)
+        return this.currentTrack.play()
     }
 
     pause() {
@@ -63,17 +61,21 @@ class Player extends EventEmitter {
 
     playNext() {
         this.currentTrack = this.nextTrack()
+        console.log('playNext', this.currentTrack)
 
         if (!this.currentTrack) return
 
-        this.play()
+        return this.play()
     }
 
     nextTrack() {
-        const track = this.currentTrack
+        const currentIdx = this.tracks.indexOf(this.currentTrack)
 
-        for (const idx of Object.keys(this.tracks)) {
-            if (track.index < idx) {
+        // loop over indexes for sparse arrays
+        for (const idx in this.tracks) {
+            console.log('nextTrack', currentIdx, idx, currentIdx < idx)
+
+            if (currentIdx < idx) {
                 return this.tracks[idx]
             }
         }
@@ -90,16 +92,14 @@ class Player extends EventEmitter {
 
 class Track extends EventEmitter {
     /** @param {Player} player */
-    constructor(idx, elem, player) {
+    constructor(elem, index) {
         super()
 
-        this.index = idx
         /** @type {HTMLMediaElement} */
         this.elem = elem
-        /** @type {Player} */
-        this.player = player
+        this.index = index
 
-        this.init(elem)
+        this.init()
     }
 
     init() {
@@ -115,7 +115,7 @@ class Track extends EventEmitter {
     }
 
     pause() {
-        return this.elem.pause()
+        this.elem.pause()
     }
 
     get paused() {

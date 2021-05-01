@@ -29,7 +29,7 @@ const App = {
                 </div>
             </div>
 
-            <verse-audio v-for="(verse, idx) in verses" :verse="verse" :player="player" :index="idx"></verse-audio>
+            <verse-audio v-for="(verse, idx) in verses" :verse="verse" @audio="player().add(idx, $event)"></verse-audio>
 
             <div v-if="passages">
                 <pre v-for="passage of passages">{{ passage }}</pre>
@@ -40,20 +40,16 @@ const App = {
         'verse-audio': VerseAudio,
     },
     data() {
-        const player = new Player()
-        window.player = player
-
         return {
             searchInput: '',
             passages: null,
             verses: [],
-            player,
             playing: false,
         }
     },
     mounted() {
-        this.player.on('play', () => { this.playing = true })
-        this.player.on('pause', () => { this.playing = false })
+        this.player().on('play', () => { this.playing = true })
+        this.player().on('pause', () => { this.playing = false })
     },
     computed: {
         playPauseStatus() {
@@ -61,6 +57,12 @@ const App = {
         },
     },
     methods: {
+        /** @returns {Player} */
+        player() {
+            if (!this._player) this._player = new Player()
+
+            return this._player
+        },
         async submitForm() {
             const result = await passageSearch(this.searchInput)
 
@@ -75,15 +77,15 @@ const App = {
         },
 
         playPause() {
-            this.player.playPause()
+            this.player().playPause()
         },
 
         stop() {
-            this.player.stop()
+            this.player().stop()
         },
 
         toggleRepeat() {
-            this.player.toggleRepeat()
+            this.player().toggleRepeat()
         }
     }
 }
