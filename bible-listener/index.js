@@ -15,16 +15,19 @@ const App = {
             </div>
 
             <div class="row m-5">
-                <div class="col">
-                    <input type="number" max=16 min=.25 step=.25 class="form-control" placeholder="Rate">
+                <div class="col-lg col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-text">Rate</span>
+                        <input type="number" max=16 min=.25 step=.25 class="form-control" id="rate" v-model="rate">
+                    </div>
                 </div>
-                <div class="col">
+                <div class="col-lg col-sm-12">
                     <button class="btn w-100 btn-outline-secondary" @click="playPause">{{ playPauseStatus }}</button>
                 </div>
-                <div class="col">
+                <div class="col-lg col-sm-12">
                     <button class="btn w-100 btn-outline-secondary" @click="stop">Stop</button>
                 </div>
-                <div class="col">
+                <div class="col-lg col-sm-12">
                     <button class="btn w-100" :class="repeatClass" @click="toggleRepeat">Repeat</button>
                 </div>
             </div>
@@ -46,6 +49,7 @@ const App = {
             verses: [],
             playing: false,
             repeat: false,
+            rate: 1,
         }
     },
     mounted() {
@@ -62,6 +66,11 @@ const App = {
                 'btn-secondary': this.repeat,
             }
         },
+    },
+    watch: {
+        rate(val) {
+            this.player().setRate(val)
+        }
     },
     methods: {
         /** @returns {Player} */

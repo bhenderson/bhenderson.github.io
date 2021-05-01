@@ -5,6 +5,7 @@ class Player extends EventEmitter {
     tracks = []
     currentTrack = null
     repeatAll = false
+    playbackRate = 1
     // isPlaying = false
 
     get isPlaying() {
@@ -94,6 +95,12 @@ class Player extends EventEmitter {
     toggleRepeat() {
         return this.repeatAll = !this.repeatAll
     }
+
+    setRate(rate) {
+        for (const t of this.tracks) {
+            t.playbackRate = rate
+        }
+    }
 }
 
 class Track extends EventEmitter {
@@ -146,6 +153,14 @@ class Track extends EventEmitter {
 
     set currentTime(t) {
         this.elem.currentTime = t
+    }
+
+    get playbackRate() {
+        return this.elem.playbackRate
+    }
+
+    set playbackRate(r) {
+        this.elem.playbackRate = r
     }
 
     listen(type) {
