@@ -32,6 +32,8 @@ class Player extends EventEmitter {
             this.playNext() || this.reset()
         })
 
+        track.playbackRate = this.playbackRate
+
         return track
     }
 
@@ -92,11 +94,14 @@ class Player extends EventEmitter {
         isPlaying && this.play()
     }
 
-    toggleRepeat() {
-        return this.repeatAll = !this.repeatAll
+    setRepeat(val) {
+        return this.repeatAll = val
     }
 
-    setRate(rate) {
+    setPlaybackRate(rate) {
+        console.log('hiiiiiiiiiiiiiii', rate)
+        this.playbackRate = rate
+
         for (const t of this.tracks) {
             t.playbackRate = rate
         }

@@ -1,6 +1,9 @@
 import passageSearch from './js/api.js'
 import Player from './js/player.js'
+import store from './js/store.js'
 import VerseAudio from './js/verseAudio.js'
+
+const { mapFields } = window['vuex-map-fields']
 
 const App = {
     template: `
@@ -44,19 +47,26 @@ const App = {
     },
     data() {
         return {
-            searchInput: '',
             passages: null,
             verses: [],
             playing: false,
-            repeat: false,
-            rate: 1,
         }
     },
     mounted() {
-        this.player().on('play', () => { this.playing = true })
-        this.player().on('pause', () => { this.playing = false })
+        const player = this.player()
+
+        player.setPlaybackRate(this.rate)
+        player.setRepeat(this.repeat)
+
+        player.on('play', () => { this.playing = true })
+        player.on('pause', () => { this.playing = false })
     },
     computed: {
+        ...mapFields([
+            'searchInput',
+            'repeat',
+            'rate',
+        ]),
         playPauseStatus() {
             return this.playing ? 'Pause' : 'Play';
         },
@@ -69,13 +79,18 @@ const App = {
     },
     watch: {
         rate(val) {
-            this.player().setRate(val)
+            this.player().setPlaybackRate(val)
+        },
+        repeat(val) {
+            this.player().setRepeat(val)
         }
     },
     methods: {
         /** @returns {Player} */
         player() {
-            if (!this._player) window.player = this._player = new Player()
+            if (!this._player) {
+                window.player = this._player = this._player || new Player()
+            }
 
             return this._player
         },
@@ -102,11 +117,13 @@ const App = {
         },
 
         toggleRepeat() {
-            this.repeat = this.player().toggleRepeat()
+            this.repeat = !this.repeat
         }
     }
 }
 
 window.addEventListener('load', () => {
-    Vue.createApp(App).mount('#app')
+    Vue.createApp(App)
+        .use(store)
+        .mount('#app')
 })
