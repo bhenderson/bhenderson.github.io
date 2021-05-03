@@ -99,7 +99,6 @@ class Player extends EventEmitter {
     }
 
     setPlaybackRate(rate) {
-        console.log('hiiiiiiiiiiiiiii', rate)
         this.playbackRate = rate
 
         for (const t of this.tracks) {
@@ -109,7 +108,6 @@ class Player extends EventEmitter {
 }
 
 class Track extends EventEmitter {
-    /** @param {Player} player */
     constructor(elem, index) {
         super()
 

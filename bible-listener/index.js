@@ -35,7 +35,7 @@ const App = {
                 </div>
             </div>
 
-            <verse-audio v-for="(verse, idx) in verses" :verse="verse" @audio="player().add(idx, $event)"></verse-audio>
+            <verse-audio v-for="(verse, idx) in verses" :verse="verse" @audio="player.add(idx, $event)"></verse-audio>
 
             <div v-if="passages">
                 <pre style="white-space: break-spaces" v-for="passage of passages">{{ passage }}</pre>
@@ -53,13 +53,13 @@ const App = {
         }
     },
     mounted() {
-        const player = this.player()
+        this.player = new Player()
 
-        player.setPlaybackRate(this.rate)
-        player.setRepeat(this.repeat)
+        this.player.setPlaybackRate(this.rate)
+        this.player.setRepeat(this.repeat)
 
-        player.on('play', () => { this.playing = true })
-        player.on('pause', () => { this.playing = false })
+        this.player.on('play', () => { this.playing = true })
+        this.player.on('pause', () => { this.playing = false })
     },
     computed: {
         ...mapFields([
@@ -79,21 +79,13 @@ const App = {
     },
     watch: {
         rate(val) {
-            this.player().setPlaybackRate(val)
+            this.player.setPlaybackRate(val)
         },
         repeat(val) {
-            this.player().setRepeat(val)
+            this.player.setRepeat(val)
         }
     },
     methods: {
-        /** @returns {Player} */
-        player() {
-            if (!this._player) {
-                window.player = this._player = this._player || new Player()
-            }
-
-            return this._player
-        },
         async submitForm() {
             const result = await passageSearch(this.searchInput)
 
@@ -109,11 +101,11 @@ const App = {
         },
 
         playPause() {
-            this.player().playPause()
+            this.player.playPause()
         },
 
         stop() {
-            this.player().stop()
+            this.player.stop()
         },
 
         toggleRepeat() {
