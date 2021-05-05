@@ -1,0 +1,21 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css");
+
+.verse-text {
+    width: max-content;
+    max-width: 100%;
+    font-family: monospace;
+    font-size: large;
+    /*
+    color: #dfe5f3;
+    text-decoration: none;
+    background-image: linear-gradient(rgb(176, 251, 188), rgb(176, 251, 188));
+    background-size: 100% 2px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    */
+}
+
+/* overwrite bootstrap */
+.progress {
+    background-color: initial !important;
+}

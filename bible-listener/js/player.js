@@ -119,8 +119,6 @@ class Track extends EventEmitter {
     }
 
     init() {
-        console.log('track initialized', this.elem)
-
         this.listen('play')
         this.listen('pause')
         this.listen('ended')

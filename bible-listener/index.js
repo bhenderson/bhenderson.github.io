@@ -9,31 +9,45 @@ const App = {
     template: `
         <div class="container">
             <div class="row my-5">
-                <div class="col">
-                    <div class="input-group">
-                        <input type="text" class="form-control" v-model="searchInput">
-                        <button class="btn btn-outline-secondary" @click="submitForm">Enter</button>
-                    </div>
+                <div class="col input-group">
+                    <button class="btn btn-outline-secondary" @click="navigateTo('prev_chapter')">
+                        <i class="bi bi-chevron-double-left"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" @click="navigateTo('prev_verse')">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" @click="navigateTo('chapter_start')">
+                        Chapter
+                    </button>
+
+                    <input type="text" class="form-control" v-model="searchInput" @blur="submitForm()">
+
+                    <button class="btn btn-outline-secondary" @click="navigateTo('next_verse')">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary" @click="navigateTo('next_chapter')">
+                        <i class="bi bi-chevron-double-right"></i>
+                    </button>
                 </div>
             </div>
 
             <div class="row my-5">
-                <div class="col-lg col-sm-12">
+                <div class="col-lg col-12">
                     <div class="input-group">
                         <span class="input-group-text">Rate</span>
                         <input type="number" max=16 min=.25 step=.25 class="form-control" id="rate" v-model="rate">
                     </div>
                 </div>
-                <div class="col-lg col-sm-12">
+                <div class="col-lg col-12">
                     <button class="btn w-100 btn-outline-secondary" @click="playPause">{{ playPauseStatus }}</button>
                 </div>
-                <div class="col-lg col-sm-12">
+                <div class="col-lg col-12">
                     <button class="btn w-100 btn-outline-secondary" @click="stop">Stop</button>
                 </div>
-                <div class="col-lg col-sm-12">
+                <div class="col-lg col-12">
                     <button class="btn w-100 btn-outline-secondary" @click="toggleRepeat">Repeat</button>
                 </div>
-                <div class="col-lg col-sm-12">
+                <div class="col-lg col-12">
                     <button class="btn w-100 btn-outline-secondary" @click="toggleFirstLetters">First Letters</button>
                 </div>
             </div>
@@ -103,12 +117,12 @@ const App = {
         }
     },
     methods: {
-        async submitForm() {
-            const result = await passageSearch(this.searchInput)
+        async submitForm(search) {
+            this.result = await passageSearch(search || this.searchInput)
 
             this.verses = []
-            this.searchInput = result.canonical
-            const passages = result
+            this.searchInput = this.result.canonical
+            const passages = this.result
                 .passages
                 .join('')
                 .split(/(?=\[\d+])/)
@@ -117,14 +131,13 @@ const App = {
                     .replace(/\s+/sg, ' ')
                 )
 
-            for (const parsed of result.parsed) {
+            for (const parsed of this.result.parsed) {
                 for (let ref = parsed[0]; ref <= parsed[1]; ref++) {
                     const text = passages.shift()
                     const firstLetters = this.makeFirstLetters(text)
                     this.verses.push({ref, text, firstLetters})
                 }
             }
-            console.log(result)
         },
 
         playPause() {
@@ -145,6 +158,20 @@ const App = {
 
         makeFirstLetters(text) {
             return text.replace(/(?!\b)[a-zA-Z]/g, '_')
+        },
+
+        navigateTo(section) {
+            let search = this.result?.passage_meta?.[0]?.[section]
+
+            if (!search) {
+                return
+            }
+
+            if (Array.isArray(search)) {
+                search = search.join('-')
+            }
+
+            this.submitForm(search)
         }
     }
 }
