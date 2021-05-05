@@ -50,7 +50,7 @@ export default {
     Christ, the righteousness from God that depends on faith—[10] that I may
     know him and the power of his resurrection, and may share his sufferings,
     becoming like him in his death, [11] that by any means possible I may
-    attain the resurrection from the dead.\n\nStraining Toward the Goal\n\n
+    attain the resurrection from the dead.\n\n
     [12] Not that I have already obtained this or am already perfect, but I
     press on to make it my own, because Christ Jesus has made me his own.
     [13] Brothers, I do not consider that I have made it my own.  But one
