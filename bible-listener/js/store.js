@@ -6,6 +6,7 @@ const store = Vuex.createStore({
       searchInput: "",
       repeat: false,
       rate: 1,
+      firstLetters: false,
     };
   },
   getters: {

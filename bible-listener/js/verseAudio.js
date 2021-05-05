@@ -5,7 +5,7 @@ export default {
         <div class="verse-text">
             <audio :src="url" ref="audio"></audio>
             <span class="verse-text">
-                {{verse.text}}
+                {{verseText}}
             </span>
             <div class="progress" style="height: 5px">
                 <div class="progress-bar" role="progressbar" :style="{width: progress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -21,9 +21,14 @@ export default {
         url() {
             return audioURL(this.verse.ref);
         },
+
+        verseText() {
+            return this.firstLetters ? this.verse.firstLetters : this.verse.text
+        },
     },
     props: {
         verse: null,
+        firstLetters: false,
     },
     mounted() {
         this.$emit('audio', this.$refs.audio)
@@ -44,6 +49,6 @@ export default {
 
         revertProgress($event) {
             this.progress = 0;
-        }
+        },
     },
 }

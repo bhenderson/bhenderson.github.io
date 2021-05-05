@@ -31,12 +31,15 @@ const App = {
                     <button class="btn w-100 btn-outline-secondary" @click="stop">Stop</button>
                 </div>
                 <div class="col-lg col-sm-12">
-                    <button class="btn w-100" :class="repeatClass" @click="toggleRepeat">Repeat</button>
+                    <button class="btn w-100 btn-outline-secondary" @click="toggleRepeat">Repeat</button>
+                </div>
+                <div class="col-lg col-sm-12">
+                    <button class="btn w-100 btn-outline-secondary" @click="toggleFirstLetters">First Letters</button>
                 </div>
             </div>
 
             <div v-for="(verse, idx) in verses" class="row my-3">
-                <verse-audio :verse="verse" @audio="player.add(idx, $event)"></verse-audio>
+                <verse-audio :verse="verse" :firstLetters="firstLetters" @audio="player.add(idx, $event)"></verse-audio>
             </div>
 
             <div v-if="passages">
@@ -79,6 +82,7 @@ const App = {
             'searchInput',
             'repeat',
             'rate',
+            'firstLetters',
         ]),
         playPauseStatus() {
             return this.playing ? 'Pause' : 'Play';
@@ -116,7 +120,8 @@ const App = {
             for (const parsed of result.parsed) {
                 for (let ref = parsed[0]; ref <= parsed[1]; ref++) {
                     const text = passages.shift()
-                    this.verses.push({ref, text})
+                    const firstLetters = this.makeFirstLetters(text)
+                    this.verses.push({ref, text, firstLetters})
                 }
             }
             console.log(result)
@@ -132,6 +137,14 @@ const App = {
 
         toggleRepeat() {
             this.repeat = !this.repeat
+        },
+
+        toggleFirstLetters() {
+            this.firstLetters = !this.firstLetters
+        },
+
+        makeFirstLetters(text) {
+            return text.replace(/(?!\b)[a-zA-Z]/g, '_')
         }
     }
 }
