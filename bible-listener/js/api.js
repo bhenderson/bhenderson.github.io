@@ -1,16 +1,47 @@
 import fakeResponse from './fakeResponse.js'
 
-const TOKEN = getToken();
+window.fakeResponse = fakeResponse;
+
+const options = {
+    'include-passage-references': true,
+    'include-verse-numbers': true,
+    'include-first-verse-numbers': true,
+    'include-footnotes': true,
+    'include-footnote-body': true,
+    'include-headings': true,
+    'include-short-copyright': true,
+    'include-copyright': false,
+    'include-passage-horizontal-lines': false,
+    'include-heading-horizontal-lines': false,
+    'horizontal-line-length': 55,
+    'include-selahs': true,
+    'indent-using': 'space',
+    'indent-paragraphs': 2,
+    'indent-poetry': true,
+    'indent-poetry-lines': 4,
+    'indent-declares': 40,
+    'indent-psalm-doxology': 30,
+    'line-length': 0,
+}
 
 export function passageSearch(search) {
-    // return Promise.resolve(fakeResponse)
+    return Promise.resolve(fakeResponse)
 
-    search = encodeURIComponent(search)
+    const params = new URLSearchParams({
+        q: search,
+        'include-short-copyright': false,
+        'include-footnotes': false,
+        'include-passage-references': false,
+        'include-headings': false,
+        'indent-paragraphs': 0,
+    })
 
-    return fetch(`https://api.esv.org/v3/passage/text/?q=${search}`, {
+    const token = getToken()
+
+    return fetch(`https://api.esv.org/v3/passage/text/?${params}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Token ${TOKEN}`,
+            'Authorization': `Token ${token}`,
         }
     }).then(resp => resp.json())
 }

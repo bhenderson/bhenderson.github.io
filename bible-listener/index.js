@@ -7,8 +7,8 @@ const { mapFields } = window['vuex-map-fields']
 
 const App = {
     template: `
-        <div class="container-fluid">
-            <div class="row m-5">
+        <div class="container">
+            <div class="row my-5">
                 <div class="col">
                     <div class="input-group">
                         <input type="text" class="form-control" v-model="searchInput">
@@ -17,7 +17,7 @@ const App = {
                 </div>
             </div>
 
-            <div class="row m-5">
+            <div class="row my-5">
                 <div class="col-lg col-sm-12">
                     <div class="input-group">
                         <span class="input-group-text">Rate</span>
@@ -35,11 +35,22 @@ const App = {
                 </div>
             </div>
 
-            <verse-audio v-for="(verse, idx) in verses" :verse="verse" @audio="player.add(idx, $event)"></verse-audio>
+            <div v-for="(verse, idx) in verses" class="row my-3">
+                <verse-audio :verse="verse" @audio="player.add(idx, $event)"></verse-audio>
+            </div>
 
             <div v-if="passages">
                 <pre style="white-space: break-spaces" v-for="passage of passages">{{ passage }}</pre>
             </div>
+
+            <footer>
+            Scripture quotations are from the ESV® Bible (The Holy Bible,
+            English Standard Version®), copyright © 2001 by Crossway, a
+            publishing ministry of Good News Publishers.  Used by permission.
+            All rights reserved.  You may not copy or download more than 500
+            consecutive verses of the ESV Bible or more than one half of any
+            book of the ESV Bible.
+            </footer>
         </div>
     `,
     components: {
@@ -60,6 +71,8 @@ const App = {
 
         this.player.on('play', () => { this.playing = true })
         this.player.on('pause', () => { this.playing = false })
+
+        if (this.searchInput) this.submitForm()
     },
     computed: {
         ...mapFields([
@@ -90,11 +103,20 @@ const App = {
             const result = await passageSearch(this.searchInput)
 
             this.verses = []
-            this.passages = result.passages
+            this.searchInput = result.canonical
+            const passages = result
+                .passages
+                .join('')
+                .split(/(?=\[\d+])/)
+                .map(s => s
+                    .trim()
+                    .replace(/\s+/sg, ' ')
+                )
 
             for (const parsed of result.parsed) {
-                for (let verse = parsed[0]; verse <= parsed[1]; verse++) {
-                    this.verses.push(verse)
+                for (let ref = parsed[0]; ref <= parsed[1]; ref++) {
+                    const text = passages.shift()
+                    this.verses.push({ref, text})
                 }
             }
             console.log(result)
