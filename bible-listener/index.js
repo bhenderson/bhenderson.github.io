@@ -45,10 +45,10 @@ const App = {
                     <button class="btn w-100 btn-outline-secondary" @click="stop">Stop</button>
                 </div>
                 <div class="col-lg col-12">
-                    <button class="btn w-100 btn-outline-secondary" @click="toggleRepeat">Repeat</button>
+                    <button class="btn w-100 btn-outline-secondary" :class="{active: repeat}" @click="toggleRepeat">Repeat</button>
                 </div>
                 <div class="col-lg col-12">
-                    <button class="btn w-100 btn-outline-secondary" @click="toggleFirstLetters">First Letters</button>
+                    <button class="btn w-100 btn-outline-secondary" :class="{active: firstLetters}" @click="toggleFirstLetters">First Letters</button>
                 </div>
             </div>
 
