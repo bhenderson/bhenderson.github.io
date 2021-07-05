@@ -1,4 +1,4 @@
-import passageSearch from './js/api.js'
+import * as api from './js/api.js'
 import Player from './js/player.js'
 import store from './js/store.js'
 import VerseAudio from './js/verseAudio.js'
@@ -68,6 +68,8 @@ const App = {
             consecutive verses of the ESV Bible or more than one half of any
             book of the ESV Bible.
             </footer>
+
+            <a href="#" role="button" @click="addApiToken(true)">reset api token</a>
         </div>
     `,
     components: {
@@ -79,6 +81,9 @@ const App = {
             verses: [],
             playing: false,
         }
+    },
+    beforeMount() {
+        this.addApiToken()
     },
     mounted() {
         this.player = new Player()
@@ -97,6 +102,7 @@ const App = {
             'repeat',
             'rate',
             'firstLetters',
+            'apiToken',
         ]),
         playPauseStatus() {
             return this.playing ? 'Pause' : 'Play';
@@ -118,7 +124,7 @@ const App = {
     },
     methods: {
         async submitForm(search) {
-            this.result = await passageSearch(search || this.searchInput)
+            this.result = await api.passageSearch(search || this.searchInput)
 
             this.verses = []
             this.searchInput = this.result.canonical
@@ -172,7 +178,14 @@ const App = {
             }
 
             this.submitForm(search)
-        }
+        },
+        addApiToken(force=false) {
+            if (force || !this.apiToken) {
+                this.apiToken = window.prompt('Enter API Token:', this.apiToken)
+            }
+
+            api.setToken(this.apiToken)
+        },
     }
 }
 

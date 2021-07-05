@@ -7,6 +7,7 @@ const store = Vuex.createStore({
       repeat: false,
       rate: 1,
       firstLetters: false,
+      apiToken: "",
     };
   },
   getters: {

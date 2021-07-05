@@ -2,6 +2,8 @@ import fakeResponse from './fakeResponse.js'
 
 window.fakeResponse = fakeResponse;
 
+let token;
+
 const options = {
     'include-passage-references': true,
     'include-verse-numbers': true,
@@ -36,8 +38,6 @@ export function passageSearch(search) {
         'indent-paragraphs': 0,
     })
 
-    const token = getToken()
-
     return fetch(`https://api.esv.org/v3/passage/text/?${params}`, {
         method: 'GET',
         headers: {
@@ -50,12 +50,6 @@ export function audioURL(ref) {
     return `https://audio.esv.org/hw/${ref}.mp3`
 }
 
-function getToken() {
-    const key = 'ESV_API_TOKEN'
-    const token = localStorage.getItem(key) || prompt('ESV API Token:')
-    localStorage.setItem(key, token)
-
-    return token
+export function setToken(tok) {
+    token = tok;
 }
-
-export default passageSearch
