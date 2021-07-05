@@ -53,7 +53,7 @@ const App = {
             </div>
 
             <div v-for="(verse, idx) in verses" class="row my-3">
-                <verse-audio :verse="verse" :firstLetters="firstLetters" @audio="player.add(idx, $event)"></verse-audio>
+                <verse-audio :verse="verse" :firstLetters="firstLetters" :player="player" :index="idx"></verse-audio>
             </div>
 
             <div v-if="passages">

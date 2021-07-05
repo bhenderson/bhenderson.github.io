@@ -29,11 +29,17 @@ export default {
     props: {
         verse: null,
         firstLetters: false,
+        player: null,
+        index: null,
     },
     mounted() {
-        this.$emit('audio', this.$refs.audio)
+        // this.$emit('audio', this.$refs.audio)
+        this.player.add(this.verse.ref, this.$refs.audio)
         this.listen('timeupdate', $e => this.updateProgress($e))
         this.listen('ended', $e => this.revertProgress($e))
+    },
+    unmounted() {
+        this.player.remove(this.verse.ref, this.$refs.audio)
     },
     methods: {
         listen(type, listener) {

@@ -9,9 +9,25 @@ class Player extends EventEmitter {
     // isPlaying = false
 
     get isPlaying() {
-        for (const track of this.tracks) {
-            if (track.playing) {
-                return true
+        return !!this.find(t => t.playing)
+    }
+
+    set(prop, value) {
+        this.find(t => {
+            if (typeof t[prop] === 'function') {
+                t[prop]()
+            } else {
+                t[prop] = value
+            }
+        })
+    }
+
+    find(cb) {
+        // loop over indexes for sparse arrays
+        for (const idx in this.tracks) {
+            const t = this.tracks[idx]
+            if (cb(t)) {
+                return t
             }
         }
     }
@@ -37,6 +53,11 @@ class Player extends EventEmitter {
         return track
     }
 
+    remove(idx, el) {
+        delete this.tracks[idx]
+        console.log(this.tracks)
+    }
+
     play() {
         if (!this.currentTrack) this.reset()
 
@@ -46,9 +67,7 @@ class Player extends EventEmitter {
     }
 
     pause() {
-        for (const t of this.tracks) {
-            t.pause()
-        }
+        this.set('pause')
     }
 
     stop() {
@@ -72,24 +91,17 @@ class Player extends EventEmitter {
     }
 
     nextTrack() {
-        const currentIdx = this.tracks.indexOf(this.currentTrack)
+        const currentIdx = this.currentTrack.index
 
-        // loop over indexes for sparse arrays
-        for (const idx in this.tracks) {
-            if (currentIdx < idx) {
-                return this.tracks[idx]
-            }
-        }
+        return this.find(t => currentIdx < t.index && t)
     }
 
     reset() {
         const isPlaying = this.isPlaying
 
-        this.currentTrack = this.tracks[0]
+        this.currentTrack = this.find(t => t)
 
-        for (const t of this.tracks) {
-            t.currentTime = 0
-        }
+        this.set('currentTime', 0)
 
         isPlaying && this.play()
     }
@@ -101,9 +113,7 @@ class Player extends EventEmitter {
     setPlaybackRate(rate) {
         this.playbackRate = rate
 
-        for (const t of this.tracks) {
-            t.playbackRate = rate
-        }
+        this.set('playbackRate', rate)
     }
 }
 
