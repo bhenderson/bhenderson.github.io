@@ -10,3 +10,4 @@ Technical debt is better understood as the cost of writing software due to a lac
 ## Misc principles
 * [The Broken Window Theory](https://blog.codinghorror.com/the-broken-window-theory/)
 * [The Boy Scout Rule](https://www.oreilly.com/library/view/97-things-every/9780596809515/ch08.html) (Leave the code cleaner than when you found it)
+* [The Ten Commandments of Egoless Programming](https://blog.codinghorror.com/the-ten-commandments-of-egoless-programming/)
