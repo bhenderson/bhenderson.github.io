@@ -75,8 +75,10 @@ const App = {
                 <verse-audio :verse="verse" :firstLetters="firstLetters" :player="player" :index="idx"></verse-audio>
             </div>
 
-            <div v-if="passages">
-                <pre style="white-space: break-spaces" v-for="passage of passages">{{ passage }}</pre>
+            <div class="row my-3">
+                <div class="col">
+                    <textarea class="form-control"></textarea>
+                </div>
             </div>
 
             <footer>
@@ -96,7 +98,6 @@ const App = {
     },
     data() {
         return {
-            passages: null,
             verses: [],
             playing: false,
         }
