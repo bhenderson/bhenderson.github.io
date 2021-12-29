@@ -7,27 +7,46 @@ const { mapFields } = window['vuex-map-fields']
 
 const App = {
     template: `
-        <div class="container">
+        <div class="container mb-3">
             <div class="row my-5">
                 <div class="col input-group">
-                    <button class="btn btn-outline-secondary" @click="navigateTo('prev_chapter')">
+                    <button class="btn btn-outline-secondary d-none d-lg-block" @click="navigateTo('prev_chapter')">
                         <i class="bi bi-chevron-double-left"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" @click="navigateTo('prev_verse')">
+                    <button class="btn btn-outline-secondary d-none d-lg-block" @click="navigateTo('prev_verse')">
                         <i class="bi bi-chevron-left"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" @click="navigateTo('chapter_start')">
+                    <button class="btn btn-outline-secondary d-none d-lg-block" @click="navigateTo('chapter_start')">
                         Chapter
                     </button>
 
                     <input type="text" class="form-control" v-model="searchInput" @blur="submitForm()">
 
-                    <button class="btn btn-outline-secondary" @click="navigateTo('next_verse')">
+                    <button class="btn btn-outline-secondary d-none d-lg-block" @click="navigateTo('next_verse')">
                         <i class="bi bi-chevron-right"></i>
                     </button>
-                    <button class="btn btn-outline-secondary" @click="navigateTo('next_chapter')">
+                    <button class="btn btn-outline-secondary d-none d-lg-block" @click="navigateTo('next_chapter')">
                         <i class="bi bi-chevron-double-right"></i>
                     </button>
+                    <button class="btn btn-outline-secondary d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sm-menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="offcanvas offcanvas-bottom" id="sm-menu">
+                <div class="offcanvas-body">
+                    <div class="row">
+                        <div class="col input-group">
+                            <input type="number" max=16 min=.25 step=.25 class="form-control" id="rate" v-model="rate">
+                            <button class="btn btn-outline-secondary" @click="playPause"><i :class="playPauseIconClass"/></button>
+                            <button class="btn btn-outline-secondary" @click="stop"><i class="bi bi-stop"/></button>
+                            <button class="btn btn-outline-secondary" :class="{active: repeat}" @click="toggleRepeat"><i class="bi bi-arrow-repeat"/></button>
+                            <button class="btn btn-outline-secondary" :class="{active: firstLetters}" @click="toggleFirstLetters">_</button>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
             </div>
 
@@ -106,6 +125,13 @@ const App = {
         ]),
         playPauseStatus() {
             return this.playing ? 'Pause' : 'Play';
+        },
+        playPauseIconClass() {
+            return {
+                bi: true,
+                "bi-play": !this.playing,
+                "bi-pause": this.playing,
+            }
         },
         repeatClass() {
             return {
