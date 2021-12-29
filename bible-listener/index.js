@@ -181,10 +181,12 @@ const App = {
         },
         addApiToken(force=false) {
             if (force || !this.apiToken) {
-                this.apiToken = window.prompt('Enter API Token:', this.apiToken)
+                // cancel shouldn't reset the token.
+                this.apiToken = window.prompt('Enter API Token:', this.apiToken) || this.apiToken
             }
 
             api.setToken(this.apiToken)
+            return false;
         },
     }
 }
