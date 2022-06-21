@@ -1,4 +1,4 @@
-I wanted to start cateloging my profesional learnings and understandings. I should have started this when I was young. I also hope to see how my opinions have changed over time.
+I wanted to start cateloging my profesional learnings and understandings. I should have started this when I was younger. I also hope to see how my opinions have changed over time.
 
 # Refactoring
 
