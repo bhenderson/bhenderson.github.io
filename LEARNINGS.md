@@ -11,3 +11,6 @@ Technical debt is better understood as the cost of writing software due to a lac
 * [The Broken Window Theory](https://blog.codinghorror.com/the-broken-window-theory/)
 * [The Boy Scout Rule](https://www.oreilly.com/library/view/97-things-every/9780596809515/ch08.html) (Leave the code cleaner than when you found it)
 * [The Ten Commandments of Egoless Programming](https://blog.codinghorror.com/the-ten-commandments-of-egoless-programming/)
+
+## Git
+Git is probably one of my favorite tools. Recently there was a [featured blog article](https://blog.plover.com/2022/06/29/#gt-sec2) about it that I thought was good, but the referenced [Git from the Bottom Up](https://jwiegley.github.io/git-from-the-bottom-up/) article is exceptional.
